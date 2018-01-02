@@ -9,19 +9,26 @@ db.defaults({
     users: []
 }).write();
 
+let users = db.get('users');
+
 // add one user if we have none
-if (db.get('users').value().length === 0) {
+if (users.value().length === 0) {
 
     // call him jerry
-    db.get('users').push({
+    users.push({
 
         name: 'jerry',
         lastOn: new Date(),
-        visits: 1
+        visits: 0
 
     }).write();
 
 }
 
-// always find and update 'jerry'
-console.log( db.get('users').find({name:'jerry'}).value() );
+// find  and update jerry
+let jerry = db.get('users').find({name:'jerry'});
+let visits = jerry.value().visits;
+
+jerry.assign({visits:visits += 1,lastOn : new Date()}).write();
+
+console.log( jerry.value() );
